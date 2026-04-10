@@ -23,6 +23,7 @@ def load_assets():
     model = load_model("models/revenue_model.pkl")
     feature_cols = load_feature_columns("models/feature_columns.pkl")
     lag_history = load_lag_history("data/lag_history.parquet")
+    lag_history = lag_history[lag_history["CUSTOMER_TYPE"] != "Unknown"].reset_index(drop=True)
     return model, feature_cols, lag_history
 
 
