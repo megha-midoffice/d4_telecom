@@ -57,6 +57,7 @@ if "baseline_forecast" in st.session_state:
         .reset_index()
         .sort_values("DATE")
     )
+    monthly_totals["DATE"] = monthly_totals["DATE"].dt.strftime("%b %Y")
 
     st.subheader("Baseline Forecast (Total Revenue)")
     st.line_chart(monthly_totals.set_index("DATE"))
