@@ -1,4 +1,5 @@
 import streamlit as st
+import altair as alt
 
 from forecast import (
     load_model,
@@ -57,10 +58,12 @@ if "baseline_forecast" in st.session_state:
         .reset_index()
         .sort_values("DATE")
     )
-    monthly_totals["DATE"] = monthly_totals["DATE"].dt.strftime("%b %Y")
-
     st.subheader("Baseline Forecast (Total Revenue)")
-    st.line_chart(monthly_totals.set_index("DATE"))
+    chart = alt.Chart(monthly_totals).mark_line(point=True).encode(
+        x=alt.X("DATE:T", title="Month", axis=alt.Axis(format="%b %Y", tickCount="month")),
+        y=alt.Y("predicted_amount:Q", title="Revenue")
+    ).properties(width="container")
+    st.altair_chart(chart, use_container_width=True)
 
     csv = forecast_df.to_csv(index=False).encode("utf-8")
 
